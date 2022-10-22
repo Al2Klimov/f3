@@ -179,6 +179,10 @@ int posix_fadvise(int fd, off_t offset, off_t len, int advice)
 	}
 }
 
+#endif	/* Apple Macintosh */
+
+#if (__APPLE__ && __MACH__) || defined(__OpenBSD__)
+
 #include <unistd.h> /* For usleep(). */
 
 void msleep(double wait_ms)
@@ -186,7 +190,7 @@ void msleep(double wait_ms)
 	assert(!usleep(wait_ms * 1000));
 }
 
-#else
+#else	/* Apple Macintosh / OpenBSD */
 
 #include <time.h> /* For clock_gettime() and clock_nanosleep(). */
 
@@ -221,4 +225,4 @@ void msleep(double wait_ms)
 	assert(ret == 0);
 }
 
-#endif
+#endif	/* Apple Macintosh / OpenBSD */
