@@ -1,0 +1,22 @@
+Index: f3read.c
+--- f3read.c.orig
++++ f3read.c
+@@ -1,3 +1,5 @@
++#include <unistd.h>
++
+ #define _POSIX_C_SOURCE 200112L
+ #define _XOPEN_SOURCE 600
+ 
+@@ -433,6 +435,12 @@ int main(int argc, char **argv)
+ 	/* Read parameters. */
+ 	argp_parse(&argp, argc, argv, 0, NULL, &args);
+ 	print_header(stdout, "read");
++
++	adjust_dev_path(&args.dev_path);
++
++	assert(!unveil(args.dev_path, "r"));
++	assert(!unveil(NULL, NULL));
++	assert(!pledge("stdio rpath", ""));
+ 
+ 	files = ls_my_files(args.dev_path, args.start_at, args.end_at);
+ 
