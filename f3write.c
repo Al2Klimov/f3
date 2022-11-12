@@ -372,11 +372,9 @@ int main(int argc, char **argv)
 
 	adjust_dev_path(&args.dev_path);
 
-#ifdef __OpenBSD__
 	assert(!unveil(args.dev_path, "rwc"));
 	assert(!unveil(NULL, NULL));
 	assert(!pledge("stdio rpath wpath cpath", ""));
-#endif /* OpenBSD */
 
 	unlink_old_files(args.dev_path, args.start_at, args.end_at);
 
