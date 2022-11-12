@@ -9,7 +9,7 @@ CATEGORIES=	sysutils
 # GPLv3
 PERMIT_PACKAGE=	Yes
 
-#WANTLIB=	XXX
+WANTLIB=	c m
 
 USE_GMAKE=	Yes
 NO_TEST=	Yes
