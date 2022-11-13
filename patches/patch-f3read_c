@@ -7,7 +7,7 @@ Index: f3read.c
  #define _POSIX_C_SOURCE 200112L
  #define _XOPEN_SOURCE 600
  
-@@ -433,6 +435,12 @@ int main(int argc, char **argv)
+@@ -433,6 +435,11 @@ int main(int argc, char **argv)
  	/* Read parameters. */
  	argp_parse(&argp, argc, argv, 0, NULL, &args);
  	print_header(stdout, "read");
@@ -15,7 +15,6 @@ Index: f3read.c
 +	adjust_dev_path(&args.dev_path);
 +
 +	assert(!unveil(args.dev_path, "r"));
-+	assert(!unveil(NULL, NULL));
 +	assert(!pledge("stdio rpath", NULL));
  
  	files = ls_my_files(args.dev_path, args.start_at, args.end_at);
