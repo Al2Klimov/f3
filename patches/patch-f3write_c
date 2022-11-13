@@ -7,15 +7,18 @@ Index: f3write.c
  #define _POSIX_C_SOURCE 200112L
  #define _XOPEN_SOURCE 600
  
-@@ -367,6 +369,11 @@ int main(int argc, char **argv)
+@@ -367,6 +369,14 @@ int main(int argc, char **argv)
  	/* Read parameters. */
  	argp_parse(&argp, argc, argv, 0, NULL, &args);
  	print_header(stdout, "write");
 +
 +	adjust_dev_path(&args.dev_path);
 +
-+	assert(!unveil(args.dev_path, "rwc"));
-+	assert(!pledge("stdio rpath wpath cpath", NULL));
++	if (unveil(args.dev_path, "rwc"))
++		err(1, "unveil");
++
++	if (pledge("stdio rpath wpath cpath", NULL))
++		err(1, "pledge");
  
  	unlink_old_files(args.dev_path, args.start_at, args.end_at);
  
