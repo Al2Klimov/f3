@@ -14,6 +14,6 @@ WANTLIB=	c m
 USE_GMAKE=	Yes
 NO_TEST=	Yes
 
-LIB_DEPENDS=	devel/argp-standalone
+BUILD_DEPENDS=	devel/argp-standalone
 
 .include <bsd.port.mk>
