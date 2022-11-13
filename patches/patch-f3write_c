@@ -16,7 +16,7 @@ Index: f3write.c
 +
 +	assert(!unveil(args.dev_path, "rwc"));
 +	assert(!unveil(NULL, NULL));
-+	assert(!pledge("stdio rpath wpath cpath", ""));
++	assert(!pledge("stdio rpath wpath cpath", NULL));
  
  	unlink_old_files(args.dev_path, args.start_at, args.end_at);
  
