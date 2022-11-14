@@ -14,10 +14,10 @@ Index: f3write.c
 +
 +	adjust_dev_path(&args.dev_path);
 +
-+	if (unveil(args.dev_path, "rwc"))
++	if (unveil(args.dev_path, "rwc") == -1)
 +		err(1, "unveil");
 +
-+	if (pledge("stdio rpath wpath cpath", NULL))
++	if (pledge("stdio rpath wpath cpath", NULL) == -1)
 +		err(1, "pledge");
  
  	unlink_old_files(args.dev_path, args.start_at, args.end_at);
