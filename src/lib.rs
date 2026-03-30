@@ -625,21 +625,9 @@ pub mod flow {
 
         /// Get remaining chunk size based on blocks_per_delay.
         pub fn get_rem_chunk_size(&self) -> u64 {
-            let total_blocks =
-                self.total_size as i64 / self.block_size as i64;
-            let processed_blocks =
-                self.total_processed as i64 / self.block_size as i64;
-            let rem_blocks = total_blocks - processed_blocks;
-            if rem_blocks <= 0 {
-                return 0;
-            }
-
-            let bpd = if self.blocks_per_delay < rem_blocks {
-                self.blocks_per_delay
-            } else {
-                rem_blocks
-            };
-            let rem_size = bpd as u64 * self.block_size as u64;
+            let rem_blocks = self.blocks_per_delay - self.processed_blocks;
+            assert!(rem_blocks > 0);
+            let rem_size = rem_blocks as u64 * self.block_size as u64;
 
             if self.has_rem_chunk_size && rem_size >= self.rem_chunk_size {
                 self.rem_chunk_size
