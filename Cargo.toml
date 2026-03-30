@@ -1,0 +1,34 @@
+[package]
+name = "f3"
+version = "9.0.0"
+edition = "2021"
+description = "Fight Flash Fraud - test and detect counterfeit flash drives"
+license = "GPL-3.0"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+libc = "0.2"
+nix = { version = "0.29", features = ["fs", "ioctl", "time"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+udev = "0.9"
+
+[[bin]]
+name = "f3write"
+path = "src/bin/f3write.rs"
+
+[[bin]]
+name = "f3read"
+path = "src/bin/f3read.rs"
+
+[[bin]]
+name = "f3probe"
+path = "src/bin/f3probe.rs"
+
+[[bin]]
+name = "f3brew"
+path = "src/bin/f3brew.rs"
+
+[[bin]]
+name = "f3fix"
+path = "src/bin/f3fix.rs"
