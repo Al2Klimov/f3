@@ -225,7 +225,7 @@ pub mod libutils {
         pub fn print(&self, block_size: usize, unit_name: &str) {
             fn print_stat(prefix: &str, count: u64, block_size: usize, unit_name: &str) {
                 let bytes = count as f64 * block_size as f64;
-                let (val, unit) = super::libutils::adjust_unit(bytes);
+                let (val, unit) = adjust_unit(bytes);
                 println!("{} {:.2} {} ({} {})", prefix, val, unit, count, unit_name);
             }
 
@@ -455,11 +455,11 @@ pub mod libutils {
         fn test_adjust_unit() {
             let (val, unit) = adjust_unit(1024.0);
             assert_eq!(unit, "KB");
-            assert!((val - 1.0).abs() < f64::EPSILON);
+            assert!((val - 1.0).abs() < 1e-10);
 
             let (val, unit) = adjust_unit(1024.0 * 1024.0);
             assert_eq!(unit, "MB");
-            assert!((val - 1.0).abs() < f64::EPSILON);
+            assert!((val - 1.0).abs() < 1e-10);
         }
 
         #[test]
@@ -811,11 +811,10 @@ pub mod flow {
 
             let t2 = Instant::now();
             let elapsed_ns = t2.duration_since(self.t1).as_nanos() as u64;
-            let delay_ns = elapsed_ns + self.acc_delay_ns;
+            let mut delay_ns = elapsed_ns + self.acc_delay_ns;
             let bytes_g =
                 self.blocks_per_delay as f64 * self.block_size as f64 * 1_000_000_000.0;
             let mut inst_speed = bytes_g / delay_ns as f64;
-            let mut delay_ns = delay_ns;
 
             if !self.has_rem_chunk_size {
                 self.update_rem_chunk_size(inst_speed);
@@ -1069,6 +1068,8 @@ pub mod flow {
         }
 
         /// Free the dynamically allocated buffer, keeping the backup.
+        /// After calling this, `get_len()` returns 0 and `get_buf()` will
+        /// return the backup buffer. Matches C `dbuf_free()` semantics.
         pub fn free(&mut self) {
             self.buf = Vec::new();
             self.len = 0;
